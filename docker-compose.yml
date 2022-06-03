@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  zerotier:
+    container_name: zu-controller-moon
+    build:
+      context: ./zerotier
+    restart: unless-stopped
+    volumes:
+      - zerotier:/var/lib/zerotier-one
+    expose:
+      - "9993/tcp"
+    ports:
+      - "9993:9993/udp"
+  zero-ui:
+    image: dec0dos/zero-ui:latest
+    container_name: zu-main
+    restart: unless-stopped
+    depends_on:
+      - zerotier
+    volumes:
+      - zerotier:/var/lib/zerotier-one
+      - zero-ui:/app/backend/data
+    environment:
+      - ZU_CONTROLLER_ENDPOINT=http://zerotier:9993/
+      - ZU_SECURE_HEADERS=false
+      - ZU_DEFAULT_USERNAME=admin
+      - ZU_DEFAULT_PASSWORD=zero-ui
+    ports:
+      - "4000:4000"
+
+volumes:
+  zero-ui_data:
+  zerotier:
