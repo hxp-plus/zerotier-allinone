@@ -13,7 +13,7 @@ services:
     ports:
       - "9993:9993/udp"
   zero-ui:
-    image: dec0dos/zero-ui:latest
+    image: docker.io/dec0dos/zero-ui:latest
     container_name: zu-main
     restart: unless-stopped
     depends_on:
